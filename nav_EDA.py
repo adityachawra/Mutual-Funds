@@ -1,7 +1,7 @@
 import pandas as pd
 
 import json
-from json_to_dict import get_nav_data
+from json_to_dict import get_nav_data, get_specs_data
 
 
 
@@ -18,4 +18,17 @@ for columns in nav_dfexp.columns:
 
 nav_dfexp.reset_index(inplace=True)
 
-nav_df = nav_dfexp
+specs = get_specs_data()
+specs_df = pd.DataFrame(specs) 
+specs_df = specs_df.transpose()
+specs_df['main_type'] = specs_df['category'].str.extract(r'^(.*?)\s*\(')
+specs_df['inner'] = specs_df['category'].str.extract(r'\(\s*(.*?)\s*\)')
+specs_df[['sub_type', 'specific_type']] = specs_df['inner'].str.split(' - ', expand=True)
+
+# Drop the intermediate column
+specs_df.drop(columns='inner', inplace=True)
+
+
+
+nav_df = nav_dfexp.copy(deep = True)
+
