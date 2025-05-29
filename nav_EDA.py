@@ -27,7 +27,7 @@ specs_df[['sub_type', 'specific_type']] = specs_df['inner'].str.split(' - ', exp
 
 # Drop the intermediate column
 specs_df.drop(columns='inner', inplace=True)
-
+specs_df.reset_index(names = "Scheme Code",inplace=True)
 
 
 nav_df = nav_dfexp.copy(deep = True)
